@@ -1,4 +1,9 @@
-﻿using FluentValidation;
+﻿/*#
+購物車
+㕥操諸CartItem
+全于內存、不涉外存
+ */
+using FluentValidation;
 using FluentValidation.Results;
 
 namespace DevStore.ShoppingCart.API.Model {
@@ -9,11 +14,13 @@ namespace DevStore.ShoppingCart.API.Model {
 		public Guid CustomerId { get; set; }
 		public decimal Total { get; set; }
 		public List<CartItem> Items { get; set; } = new List<CartItem>();
+		//#ns:FluentValidation.Results
 		public ValidationResult ValidationResult { get; set; }
 
 		public bool HasVoucher { get; set; }
 		public decimal Discount { get; set; }
 
+		//# 消費券, 折扣
 		public Voucher Voucher { get; set; }
 
 		public CustomerShoppingCart(Guid customerId) {
@@ -101,7 +108,9 @@ namespace DevStore.ShoppingCart.API.Model {
 		}
 
 		internal bool IsValid() {
-			var errors = Items.SelectMany(i => new CartItem.ShoppingCartItemValidation().Validate(i).Errors).ToList();
+			var errors = Items.SelectMany(
+				i => new CartItem.ShoppingCartItemValidation().Validate(i).Errors
+			).ToList();
 			errors.AddRange(new CustomerShoppingCartValidation().Validate(this).Errors);
 			ValidationResult = new ValidationResult(errors);
 

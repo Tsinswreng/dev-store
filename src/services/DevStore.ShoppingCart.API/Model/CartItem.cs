@@ -1,7 +1,11 @@
-﻿using FluentValidation;
+﻿/*#
+購物車項
+ */
+using FluentValidation;
 using System.Text.Json.Serialization;
 
 namespace DevStore.ShoppingCart.API.Model {
+	//#購物車項
 	public class CartItem {
 		public CartItem() {
 			Id = Guid.NewGuid();
@@ -12,7 +16,7 @@ namespace DevStore.ShoppingCart.API.Model {
 		public string Name { get; set; }
 		public int Quantity { get; set; }
 		public decimal Price { get; set; }
-		public string Image { get; set; }
+		public string Image { get; set; }//# url?
 
 		public Guid ShoppingCartId { get; set; }
 
@@ -39,6 +43,7 @@ namespace DevStore.ShoppingCart.API.Model {
 			return new ShoppingCartItemValidation().Validate(this).IsValid;
 		}
 
+		//# 見 ask
 		public class ShoppingCartItemValidation : AbstractValidator<CartItem> {
 			public ShoppingCartItemValidation() {
 				RuleFor(c => c.ProductId)
