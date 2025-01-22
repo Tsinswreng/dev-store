@@ -29,11 +29,13 @@ namespace DevStore.ShoppingCart.API.Data {
 				.HasName("IDX_Customer");//#Use HasDatabaseName() instead
 
 			modelBuilder.Entity<CustomerShoppingCart>()
+//#把Voucher的成員 當作CustomerShoppingCart的成員來存
+//#讓 Voucher 的屬性不會單獨存在，而是作為 CustomerShoppingCart 的一部分來存儲
 				.Ignore(c => c.Voucher)
 				.OwnsOne(c => c.Voucher, v => {
 					v.Property(vc => vc.Code)
 						.HasColumnType("varchar(50)");
-
+					//#配置vc.DiscountType列、自動推導類型
 					v.Property(vc => vc.DiscountType);
 
 					v.Property(vc => vc.Percentage);
@@ -43,11 +45,18 @@ namespace DevStore.ShoppingCart.API.Data {
 
 			modelBuilder.Entity<CustomerShoppingCart>()
 				.HasMany(c => c.Items)
+//#>每個 Item 實體都屬於一個 CustomerShoppingCart
 				.WithOne(i => i.CustomerShoppingCart)
+//#>Items表ʹ外鍵
 				.HasForeignKey(c => c.ShoppingCartId);
 
+			//#設置Cascade Delete
+			//# Microsoft.EntityFrameworkCore.Metadata.IMutableForeignKey relationship
 			foreach (var relationship in modelBuilder.Model.GetEntityTypes()
-				.SelectMany(e => e.GetForeignKeys())) relationship.DeleteBehavior = DeleteBehavior.Cascade;
+				.SelectMany(e => e.GetForeignKeys())
+			){
+				relationship.DeleteBehavior = DeleteBehavior.Cascade;
+			}
 		}
 	}
 }
