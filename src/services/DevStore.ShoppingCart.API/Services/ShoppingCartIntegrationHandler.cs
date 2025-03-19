@@ -1,4 +1,7 @@
-﻿using DevStore.Core.Messages.Integration;
+﻿/*#
+刪購物車
+ */
+using DevStore.Core.Messages.Integration;
 using DevStore.MessageBus;
 using DevStore.ShoppingCart.API.Data;
 using Microsoft.EntityFrameworkCore;

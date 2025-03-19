@@ -10,9 +10,10 @@ using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
+//#見 ask
 builder.Logging.AddSerilog(new LoggerConfiguration()
-    .ReadFrom.Configuration(builder.Configuration)
-    .CreateLogger());
+	.ReadFrom.Configuration(builder.Configuration)
+	.CreateLogger());
 
 #endregion
 
@@ -48,50 +49,51 @@ app.Run();
 
 #region Actions
 
-void MapActions(WebApplication app)
-{
-    app.MapGet("/shopping-cart", [Authorize] async (
-        ShoppingCart cart) => await cart.GetShoppingCart())
-        .WithName("GetShoppingCart")
-        .WithTags("ShoppingCart");
+void MapActions(WebApplication app) {
+	app.MapGet("/shopping-cart", [Authorize] async (
+		ShoppingCart cart
+	) => await cart.GetShoppingCart())
+		.WithName("GetShoppingCart")
+		.WithTags("ShoppingCart");
 
-    app.MapPost("/shopping-cart", [Authorize] async (
-        ShoppingCart cart,
-        CartItem item) => await cart.AddItem(item))
-        .ProducesValidationProblem()
-        .Produces<CartItem>(StatusCodes.Status201Created)
-        .Produces(StatusCodes.Status400BadRequest)
-        .WithName("AddItem")
-        .WithTags("ShoppingCart");
+	app.MapPost("/shopping-cart", [Authorize] async (
+		ShoppingCart cart,
+		CartItem item
+	) => await cart.AddItem(item))
+		.ProducesValidationProblem()
+		.Produces<CartItem>(StatusCodes.Status201Created)
+		.Produces(StatusCodes.Status400BadRequest)
+		.WithName("AddItem")
+		.WithTags("ShoppingCart");
 
-    app.MapPut("/shopping-cart/{productId}", [Authorize] async (
-        ShoppingCart cart,
-        Guid productId,
-        CartItem item) => await cart.UpdateItem(productId, item))
-        .ProducesValidationProblem()
-        .Produces<CartItem>(StatusCodes.Status204NoContent)
-        .Produces(StatusCodes.Status400BadRequest)
-        .WithName("UpdateItem")
-        .WithTags("ShoppingCart");
+	app.MapPut("/shopping-cart/{productId}", [Authorize] async (
+		ShoppingCart cart,
+		Guid productId,
+		CartItem item) => await cart.UpdateItem(productId, item))
+		.ProducesValidationProblem()
+		.Produces<CartItem>(StatusCodes.Status204NoContent)
+		.Produces(StatusCodes.Status400BadRequest)
+		.WithName("UpdateItem")
+		.WithTags("ShoppingCart");
 
-    app.MapDelete("/shopping-cart/{productId}", [Authorize] async (
-        ShoppingCart cart,
-        Guid productId) => await cart.RemoveItem(productId))
-        .ProducesValidationProblem()
-        .Produces<CartItem>(StatusCodes.Status204NoContent)
-        .Produces(StatusCodes.Status400BadRequest)
-        .Produces(StatusCodes.Status404NotFound)
-        .WithName("RemoveItem")
-        .WithTags("ShoppingCart");
+	app.MapDelete("/shopping-cart/{productId}", [Authorize] async (
+		ShoppingCart cart,
+		Guid productId) => await cart.RemoveItem(productId))
+		.ProducesValidationProblem()
+		.Produces<CartItem>(StatusCodes.Status204NoContent)
+		.Produces(StatusCodes.Status400BadRequest)
+		.Produces(StatusCodes.Status404NotFound)
+		.WithName("RemoveItem")
+		.WithTags("ShoppingCart");
 
-    app.MapPost("/shopping-cart/apply-voucher", [Authorize] async (
-        ShoppingCart cart,
-        Voucher voucher) => await cart.ApplyVoucher(voucher))
-        .ProducesValidationProblem()
-        .Produces<CartItem>(StatusCodes.Status204NoContent)
-        .Produces(StatusCodes.Status400BadRequest)
-        .WithName("ApplyVoucher")
-        .WithTags("ShoppingCart");
+	app.MapPost("/shopping-cart/apply-voucher", [Authorize] async (
+		ShoppingCart cart,
+		Voucher voucher) => await cart.ApplyVoucher(voucher))
+		.ProducesValidationProblem()
+		.Produces<CartItem>(StatusCodes.Status204NoContent)
+		.Produces(StatusCodes.Status400BadRequest)
+		.WithName("ApplyVoucher")
+		.WithTags("ShoppingCart");
 }
 
 #endregion

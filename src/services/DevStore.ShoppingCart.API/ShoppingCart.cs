@@ -148,6 +148,12 @@ namespace DevStore.ShoppingCart.API {
 			_errors.Add(error);
 		}
 
+		//#
+		/// <summary>
+		/// Custom response with validation errors
+		/// </summary>
+		/// <param name="result"></param>
+		/// <returns></returns>
 		IResult CustomResponse(object result = null) {
 			if (!_errors.Any()) {
 				return Results.Ok(result);

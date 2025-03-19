@@ -27,3 +27,9 @@ csharp_new_line_before_open_brace = none
 csharp_new_line_before_else = false
 csharp_new_line_before_catch = false
 csharp_new_line_before_finally = false
+
+#以下似不效
+max_line_length = 20  # 根據需要調整行長
+# 設置參數分行的風格
+csharp_style_wrapping_before_binary_operators = true
+csharp_style_wrap_long_lines = true

@@ -4,50 +4,51 @@ using static DevStore.WebAPI.Core.DatabaseFlavor.ProviderConfiguration;
 using DevStore.ShoppingCart.API.Data;
 using DevStore.WebAPI.Core.Configuration;
 
-namespace DevStore.ShoppingCart.API.Configuration
-{
-    public static class ApiConfig
-    {
-        public static void AddApiConfiguration(this IServiceCollection services, IConfiguration configuration)
-        {
-            services.ConfigureProviderForContext<ShoppingCartContext>(DetectDatabase(configuration));
+namespace DevStore.ShoppingCart.API.Configuration {
+public static class ApiConfig {
+	//#見 ask
+	public static void AddApiConfiguration(
+		this IServiceCollection services
+		,IConfiguration configuration
+	) {
+		services.ConfigureProviderForContext<ShoppingCartContext>(
+			DetectDatabase(configuration)
+		);
 
-            services.AddGrpc();
+		services.AddGrpc();
 
-            services.AddCors(options =>
-            {
-                options.AddPolicy("Total",
-                    builder =>
-                        builder
-                            .AllowAnyOrigin()
-                            .AllowAnyMethod()
-                            .AllowAnyHeader());
-            });
+		services.AddCors(options => {
+			options.AddPolicy("Total",
+				builder =>
+					builder
+						.AllowAnyOrigin()
+						.AllowAnyMethod()
+						.AllowAnyHeader());
+		});
 
-            services.AddDefaultHealthCheck(configuration);
-        }
+		services.AddDefaultHealthCheck(configuration);
+	}
 
-        public static void UseApiConfiguration(this WebApplication app, IWebHostEnvironment env)
-        {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
+	public static void UseApiConfiguration(this WebApplication app, IWebHostEnvironment env) {
+		if (env.IsDevelopment()) {
+			app.UseDeveloperExceptionPage();
+		}
 
-            // Under certain scenarios, e.g minikube / linux environment / behind load balancer
-            // https redirection could lead dev's to over complicated configuration for testing purpouses
-            // In production is a good practice to keep it true
-            if (app.Configuration["USE_HTTPS_REDIRECTION"] == "true")
-                app.UseHttpsRedirection();
+		// Under certain scenarios, e.g minikube / linux environment / behind load balancer
+		// https redirection could lead dev's to over complicated configuration for testing purpouses
+		// In production is a good practice to keep it true
+		if (app.Configuration["USE_HTTPS_REDIRECTION"] == "true")
+			app.UseHttpsRedirection();
 
-            app.UseCors("Total");
+		app.UseCors("Total");
 
-            app.UseAuthentication();
-            app.UseAuthorization();
+		app.UseAuthentication();
+		app.UseAuthorization();
 
-            app.MapGrpcService<ShoppingCartGrpcService>().RequireCors("Total");
+		app.MapGrpcService<ShoppingCartGrpcService>().RequireCors("Total");
 
-            app.UseDefaultHealthcheck();
-        }
-    }
+		app.UseDefaultHealthcheck();
+	}
 }
+
+}//~namespace DevStore.ShoppingCart.API.Configuration
